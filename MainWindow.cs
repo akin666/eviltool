@@ -1,5 +1,6 @@
 ﻿using EvilTool.Editor;
 using EvilTool.Element;
+using EvilTool.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -152,7 +153,7 @@ namespace EvilTool
         private void createPoint(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            NodeInterface node = new PointNode();
+            NodeInterface node = new PointNode( new PointModel() );
             TreeNode added = selected.Nodes.Add( node.getName() );
             added.Tag = node;
         }
@@ -160,7 +161,7 @@ namespace EvilTool
         private void createPolygon(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            NodeInterface node = new PolygonNode();
+            NodeInterface node = new PolygonNode( new PolygonModel() );
             TreeNode added = selected.Nodes.Add(node.getName());
             added.Tag = node;
         }
@@ -168,7 +169,7 @@ namespace EvilTool
         private void createLayer(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            NodeInterface node = new LayerNode( 0 ); // TODO , proper layer numbering scheme.
+            NodeInterface node = new LayerNode( new LayerModel() );
             TreeNode added = selected.Nodes.Add(node.getName());
             added.Tag = node;
         }
@@ -176,7 +177,15 @@ namespace EvilTool
         private void createContainer(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            NodeInterface node = new ContainerNode();
+            NodeInterface node = new ContainerNode( new ContainerModel() );
+            TreeNode added = selected.Nodes.Add(node.getName());
+            added.Tag = node;
+        }
+
+        private void createText(object sender, EventArgs e)
+        {
+            TreeNode selected = tree.SelectedNode;
+            NodeInterface node = new TextNode( new TextModel() );
             TreeNode added = selected.Nodes.Add(node.getName());
             added.Tag = node;
         }
@@ -197,14 +206,6 @@ namespace EvilTool
             }
         }
 
-        private void createText(object sender, EventArgs e)
-        {
-            TreeNode selected = tree.SelectedNode;
-            NodeInterface node = new TextNode();
-            TreeNode added = selected.Nodes.Add(node.getName());
-            added.Tag = node;
-        }
-
         private void saveAsFileMenu_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -216,6 +217,7 @@ namespace EvilTool
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                /*
                 TextWriter textwriter = new StringWriter();
                 JsonWriter writer = new JsonTextWriter(textwriter);
 
@@ -246,6 +248,7 @@ namespace EvilTool
                 }
 
                 Console.WriteLine("Json Output so far: " + textwriter.ToString() );
+                */
             }
         }
     }

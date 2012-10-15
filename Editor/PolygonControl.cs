@@ -53,9 +53,9 @@ namespace EvilTool.Editor
                     //target.points.Add(mouseDownLocation);
                     //                    element.update(mouseDownLocation);
                     List<int> candidates = new List<int>();
-                    for( int i = 0 ; i < target.points.Count ; ++i )
+                    for( int i = 0 ; i < target.polygon.vertexes.Count ; ++i )
                     {
-                        Point point = target.points[i];
+                        Point point = target.polygon.vertexes[i];
                         double distance = MathHelper.distance(location, point);
                         if (distance < 15.0f)
                         {
@@ -65,7 +65,7 @@ namespace EvilTool.Editor
                     double min = 15.0f;
                     foreach (int index in candidates)
                     {
-                        Point point = target.points[index];
+                        Point point = target.polygon.vertexes[index];
                         double distance = MathHelper.distance(location, point);
                         if (distance < min)
                         {
@@ -102,7 +102,7 @@ namespace EvilTool.Editor
 
             if (selected >= 0)
             {
-                target.points[selected] = location;
+                target.polygon.vertexes[selected] = location;
             }
 
             this.Invalidate();
@@ -149,15 +149,17 @@ namespace EvilTool.Editor
             Graphics graphics = e.Graphics;
             graphics.Clear(Color.AliceBlue);
 
+            List<Point> vertexes = target.polygon.vertexes;
+
             Pen blue = new Pen(Color.Blue, 2.0f);
             Pen red = new Pen(Color.Red, 1.0f);
             Pen black = new Pen(Color.Black, 2.0f);
-           
-            if (target.points.Count() > 1)
+
+            if (vertexes.Count() > 1)
             {
                 try
                 {
-                    graphics.DrawPolygon(blue, target.points.ToArray());
+                    graphics.DrawPolygon(blue, vertexes.ToArray());
                 }
                 catch (DivideByZeroException ex)
                 {
@@ -169,26 +171,26 @@ namespace EvilTool.Editor
                 }
 
             }
-            foreach (Point point in target.points)
+            foreach (Point point in vertexes)
             {
                 GraphicsHelper.circle(graphics, point, 15, red);
             }
             if (selected >= 0)
             {
-                GraphicsHelper.circle(graphics, target.points[selected], 10, black);
+                GraphicsHelper.circle(graphics, vertexes[selected], 10, black);
             }
             //graphics.Dispose();
         }
 
         private void addPoint_Click(object sender, EventArgs e)
         {
-            target.points.Add( new Point(100, 100) );
+            target.polygon.vertexes.Add(new Point(100, 100));
         }
 
         private void subdivide_Click(object sender, EventArgs e)
         {
             List<Point> points = new List<Point>();
-            List<Point> old = target.points;
+            List<Point> old = target.polygon.vertexes;
 
             if (old.Count < 2)
             {
@@ -210,7 +212,7 @@ namespace EvilTool.Editor
             points.Add(last);
             points.Add(MathHelper.midPoint(first, last));
 
-            target.points = points;
+            target.polygon.vertexes = points;
         }
 
         /*

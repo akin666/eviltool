@@ -46,7 +46,7 @@ namespace EvilTool.Editor
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    target.points.Add(mouseDownLocation);
+                    target.point.vertexes.Add(mouseDownLocation);
                     //                    element.update(mouseDownLocation);
                     break;
                 case MouseButtons.Right:
@@ -123,7 +123,7 @@ namespace EvilTool.Editor
                 graphics.DrawEllipse(red, new Rectangle(current, new Size(10, 10)));
             }
             */
-            foreach (Point point in target.points)
+            foreach (Point point in target.point.vertexes)
             {
                 graphics.DrawEllipse(pen, new Rectangle(point, new Size(5, 5)));
             }

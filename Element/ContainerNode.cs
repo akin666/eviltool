@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using EvilTool.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,11 @@ namespace EvilTool.Element
 {
     public class ContainerNode : NodeInterface
     {
-        public string name { get; set; }
+        public ContainerModel container { get; set; }
 
-        public ContainerNode()
+        public ContainerNode( ContainerModel container )
         {
+            this.container = container;
         }
 
         public Control createControl()
@@ -25,34 +27,6 @@ namespace EvilTool.Element
         public string getName()
         {
             return "container";
-        }
-
-        public void write(JsonWriter writer, TreeNode self)
-        {
-            writer.WritePropertyName(getName());
-            writer.WriteStartObject();
-
-            // write data here..
-            if (name != null)
-            {
-                writer.WritePropertyName("name");
-                writer.WriteValue(name);
-            }
-
-            foreach (TreeNode node in self.Nodes)
-            {
-                if (node.Tag is NodeInterface)
-                {
-                    ((NodeInterface)node.Tag).write(writer, node);
-                }
-            }
-
-            writer.WriteEndObject();
-        }
-
-        public TreeNode read(JsonReader reader)
-        {
-            return null;
         }
     }
 }

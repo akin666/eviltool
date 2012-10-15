@@ -12,8 +12,5 @@ namespace EvilTool.Element
     {
         Control createControl();
         string getName();
-
-        void write(JsonWriter writer ,TreeNode self);
-        TreeNode read(JsonReader reader);
     }
 }
