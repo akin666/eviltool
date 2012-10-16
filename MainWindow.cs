@@ -240,7 +240,8 @@ namespace EvilTool
             SaveFileDialog dialog = new SaveFileDialog();
             Stream stream;
 
-            dialog.Filter = "Json files (*.json)|*.json";
+            dialog.Filter = "Json files (*.json)|*.json|Json files (*.js)|*.js|All files (*.*)|*.*";
+            dialog.FilterIndex = 1;
             dialog.RestoreDirectory = true;
 
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -251,21 +252,22 @@ namespace EvilTool
                     return;
                 }
 
-                string json = "";
-
                 try
                 {
                     // write data here..
+                    List<ContainerNode> nodes = new List<ContainerNode>();
                     foreach (TreeNode rootnode in tree.Nodes)
                     {
                         if (rootnode.Tag is ContainerNode)
                         {
-                            json += JsonConvert.SerializeObject(
-                                (ContainerNode)rootnode.Tag, 
-                                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }
-                                );
+                            nodes.Add((ContainerNode)rootnode.Tag);
                         }
                     }
+
+                    string json = JsonConvert.SerializeObject(
+                        nodes ,
+                        new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }
+                        );
 
                     byte[] byteArray = Encoding.UTF8.GetBytes( json );
                     stream.Write(byteArray, 0, byteArray.Length);
@@ -275,6 +277,42 @@ namespace EvilTool
                 {
                     stream.Close();
                     Console.WriteLine("Exception while parsin json. " + ex.ToString());
+                }
+            }
+        }
+
+        private void loadFileMenu_Click(object sender, EventArgs e)
+        {
+            Stream stream = null;
+            OpenFileDialog dialog = new OpenFileDialog();
+
+            dialog.Filter = "Json files (*.json)|*.json|Json files (*.js)|*.js|All files (*.*)|*.*";
+            dialog.FilterIndex = 1;
+            dialog.RestoreDirectory = true;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if ((stream = dialog.OpenFile()) != null)
+                    {
+                        List<ContainerNode> nodes;
+                        using (stream)
+                        {
+                            StreamReader reader = new StreamReader(stream);
+                            string json = reader.ReadToEnd();
+
+                            nodes = JsonConvert.DeserializeObject<List<ContainerNode>>(json);
+                        }
+                        if (nodes != null)
+                        {
+                            // convert 'nodes' to tree etc structure..
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
             }
         }

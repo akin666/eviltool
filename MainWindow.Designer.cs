@@ -117,20 +117,21 @@
             // loadFileMenu
             // 
             this.loadFileMenu.Name = "loadFileMenu";
-            this.loadFileMenu.Size = new System.Drawing.Size(112, 22);
+            this.loadFileMenu.Size = new System.Drawing.Size(152, 22);
             this.loadFileMenu.Text = "Load";
+            this.loadFileMenu.Click += new System.EventHandler(this.loadFileMenu_Click);
             // 
             // saveAsFileMenu
             // 
             this.saveAsFileMenu.Name = "saveAsFileMenu";
-            this.saveAsFileMenu.Size = new System.Drawing.Size(112, 22);
+            this.saveAsFileMenu.Size = new System.Drawing.Size(152, 22);
             this.saveAsFileMenu.Text = "Save as";
             this.saveAsFileMenu.Click += new System.EventHandler(this.saveAsFileMenu_Click);
             // 
             // exitFileMenu
             // 
             this.exitFileMenu.Name = "exitFileMenu";
-            this.exitFileMenu.Size = new System.Drawing.Size(112, 22);
+            this.exitFileMenu.Size = new System.Drawing.Size(152, 22);
             this.exitFileMenu.Text = "Exit";
             this.exitFileMenu.Click += new System.EventHandler(this.exitApplication);
             // 
