@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("root");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tree = new System.Windows.Forms.TreeView();
@@ -91,10 +90,6 @@
             this.tree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tree.Location = new System.Drawing.Point(0, 24);
             this.tree.Name = "tree";
-            treeNode1.Name = "root";
-            treeNode1.Text = "root";
-            this.tree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
             this.tree.Size = new System.Drawing.Size(200, 314);
             this.tree.TabIndex = 0;
             // 
@@ -184,7 +179,7 @@
             // containerToolStripMenuItem
             // 
             this.containerToolStripMenuItem.Name = "containerToolStripMenuItem";
-            this.containerToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.containerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.containerToolStripMenuItem.Text = "container";
             this.containerToolStripMenuItem.Click += new System.EventHandler(this.createContainer);
             // 
@@ -211,7 +206,7 @@
             // layerToolStripMenuItem
             // 
             this.layerToolStripMenuItem.Name = "layerToolStripMenuItem";
-            this.layerToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.layerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.layerToolStripMenuItem.Text = "layer";
             this.layerToolStripMenuItem.Click += new System.EventHandler(this.createLayer);
             // 

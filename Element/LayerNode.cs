@@ -28,5 +28,24 @@ namespace EvilTool.Element
         {
             return "layer";
         }
+
+        public void add( Object o )
+        {
+            if (o is PointNode)
+            {
+                PointNode p = (PointNode)o;
+                layer.child = p.point;
+            }
+            else if (o is PolygonNode)
+            {
+                PolygonNode p = (PolygonNode)o;
+                layer.child = p.polygon;
+            }
+            else if (o is TextNode)
+            {
+                TextNode p = (TextNode)o;
+                layer.child = p.text;
+            }
+        }
     }
 }

@@ -28,5 +28,10 @@ namespace EvilTool.Element
         {
             return "container";
         }
+
+        public void add(LayerNode layer)
+        {
+            container.layers.Add(layer.layer);
+        }
     }
 }

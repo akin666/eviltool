@@ -41,10 +41,9 @@ namespace EvilTool
                 // Select the clicked node
                 tree.SelectedNode = tree.GetNodeAt(e.X, e.Y);
 
+                ContextMenuStrip menu = treemenu;
                 if (tree.SelectedNode != null)
                 {
-                    ContextMenuStrip menu = treemenu;
-
                     // Menu selection if elses.. for each node type there is a if else branch
                     // TODO! shoot myself for creating such structure..
                     if (tree.SelectedNode.Tag != null)
@@ -70,9 +69,8 @@ namespace EvilTool
                             menu = basicMenu;
                         }
                     }
-
-                    menu.Show(tree, e.Location);
                 }
+                menu.Show(tree, e.Location);
             }
         }
 
@@ -153,40 +151,71 @@ namespace EvilTool
         private void createPoint(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            NodeInterface node = new PointNode( new PointModel() );
-            TreeNode added = selected.Nodes.Add( node.getName() );
-            added.Tag = node;
+            if (selected.Tag is LayerNode)
+            {
+                // model
+                LayerNode parent = (LayerNode)selected.Tag;
+                PointNode node = new PointNode(new PointModel());
+                parent.add(node);
+
+                // ui
+                TreeNode added = selected.Nodes.Add(node.getName());
+                added.Tag = node;
+            }
         }
 
         private void createPolygon(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            NodeInterface node = new PolygonNode( new PolygonModel() );
-            TreeNode added = selected.Nodes.Add(node.getName());
-            added.Tag = node;
-        }
+            if (selected.Tag is LayerNode)
+            {
+                // model
+                LayerNode parent = (LayerNode)selected.Tag;
+                PolygonNode node = new PolygonNode(new PolygonModel());
+                parent.add(node);
 
-        private void createLayer(object sender, EventArgs e)
-        {
-            TreeNode selected = tree.SelectedNode;
-            NodeInterface node = new LayerNode( new LayerModel() );
-            TreeNode added = selected.Nodes.Add(node.getName());
-            added.Tag = node;
-        }
-
-        private void createContainer(object sender, EventArgs e)
-        {
-            TreeNode selected = tree.SelectedNode;
-            NodeInterface node = new ContainerNode( new ContainerModel() );
-            TreeNode added = selected.Nodes.Add(node.getName());
-            added.Tag = node;
+                // ui
+                TreeNode added = selected.Nodes.Add(node.getName());
+                added.Tag = node;
+            }
         }
 
         private void createText(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            NodeInterface node = new TextNode( new TextModel() );
-            TreeNode added = selected.Nodes.Add(node.getName());
+            if (selected.Tag is LayerNode)
+            {
+                // model
+                LayerNode parent = (LayerNode)selected.Tag;
+                TextNode node = new TextNode(new TextModel());
+                parent.add(node);
+
+                // ui
+                TreeNode added = selected.Nodes.Add(node.getName());
+                added.Tag = node;
+            }
+        }
+
+        private void createLayer(object sender, EventArgs e)
+        {
+            TreeNode selected = tree.SelectedNode;
+            if (selected.Tag is ContainerNode)
+            {
+                // model
+                ContainerNode parent = (ContainerNode)selected.Tag;
+                LayerNode node = new LayerNode(new LayerModel());
+                parent.add(node);
+
+                // ui
+                TreeNode added = selected.Nodes.Add(node.getName());
+                added.Tag = node;
+            }
+        }
+
+        private void createContainer(object sender, EventArgs e)
+        {
+            NodeInterface node = new ContainerNode( new ContainerModel() );
+            TreeNode added = tree.Nodes.Add(node.getName());
             added.Tag = node;
         }
 
@@ -208,47 +237,45 @@ namespace EvilTool
 
         private void saveAsFileMenu_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            SaveFileDialog dialog = new SaveFileDialog();
+            Stream stream;
 
-            //openFileDialog1.InitialDirectory = "c:\\";
-            openFileDialog1.Filter = "Json files (*.json)|*.js|All files (*.*)|*.*";
-            openFileDialog1.FilterIndex = 1;
-            openFileDialog1.RestoreDirectory = true;
+            dialog.Filter = "Json files (*.json)|*.json";
+            dialog.RestoreDirectory = true;
 
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
-                /*
-                TextWriter textwriter = new StringWriter();
-                JsonWriter writer = new JsonTextWriter(textwriter);
+                if ((stream = dialog.OpenFile()) == null)
+                {
+                    // Failed!
+                    return;
+                }
+
+                string json = "";
 
                 try
                 {
                     // write data here..
                     foreach (TreeNode rootnode in tree.Nodes)
                     {
-                        if (rootnode.Tag is NodeInterface)
+                        if (rootnode.Tag is ContainerNode)
                         {
-                            ((NodeInterface)rootnode.Tag).write(writer, rootnode);
-                        }
-                        else
-                        {
-                            foreach (TreeNode node in rootnode.Nodes)
-                            {
-                                if (node.Tag is NodeInterface)
-                                {
-                                    ((NodeInterface)node.Tag).write(writer, node);
-                                }
-                            }
+                            json += JsonConvert.SerializeObject(
+                                (ContainerNode)rootnode.Tag, 
+                                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }
+                                );
                         }
                     }
+
+                    byte[] byteArray = Encoding.UTF8.GetBytes( json );
+                    stream.Write(byteArray, 0, byteArray.Length);
+                    stream.Close();
                 }
                 catch (Exception ex)
                 {
+                    stream.Close();
                     Console.WriteLine("Exception while parsin json. " + ex.ToString());
                 }
-
-                Console.WriteLine("Json Output so far: " + textwriter.ToString() );
-                */
             }
         }
     }
