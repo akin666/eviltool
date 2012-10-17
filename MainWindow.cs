@@ -161,6 +161,7 @@ namespace EvilTool
                 // ui
                 TreeNode added = selected.Nodes.Add(node.getName());
                 added.Tag = node;
+                selected.Expand();
             }
         }
 
@@ -177,6 +178,7 @@ namespace EvilTool
                 // ui
                 TreeNode added = selected.Nodes.Add(node.getName());
                 added.Tag = node;
+                selected.Expand();
             }
         }
 
@@ -193,6 +195,7 @@ namespace EvilTool
                 // ui
                 TreeNode added = selected.Nodes.Add(node.getName());
                 added.Tag = node;
+                selected.Expand();
             }
         }
 
@@ -209,6 +212,7 @@ namespace EvilTool
                 // ui
                 TreeNode added = selected.Nodes.Add(node.getName());
                 added.Tag = node;
+                selected.Expand();
             }
         }
 
