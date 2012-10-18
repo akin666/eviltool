@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace EvilTool.Model
 {
-    public class PolygonModel
+    public class Field
     {
-        public List<Point> vertexes = new List<Point>();
+        public List<Point> points { get; set; }
+        public Position position { get; set; }
+        public Point pivot { get; set; }
     }
 }

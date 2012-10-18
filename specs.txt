@@ -1,0 +1,81 @@
+{
+    "container": {
+        "name": "hello",
+        "layers": [
+            {
+                "name": "bomb",
+                "id": 0,
+                "polygon": {
+                    "points": [
+                        {
+                            "x": 10,
+                            "y": 10
+                        },
+                        {
+                            "x": 1,
+                            "y": 2
+                        },
+                        {
+                            "x": 45,
+                            "y": 67
+                        }
+                    ],
+                    "position": {
+                        "x": 0,
+                        "y": 5,
+                        "rotation": 0
+                    },
+                    "pivot": {
+                        "x": 0,
+                        "y": 0
+                    }
+                }
+            },
+            {
+                "name": "spots",
+                "id": 1,
+                "point": {
+                    "points": [
+                        {
+                            "x": 10,
+                            "y": 10
+                        },
+                        {
+                            "x": 1,
+                            "y": 2
+                        },
+                        {
+                            "x": 45,
+                            "y": 67
+                        }
+                    ],
+                    "position": {
+                        "x": 0,
+                        "y": 5,
+                        "rotation": 0
+                    },
+                    "pivot": {
+                        "x": 0,
+                        "y": 0
+                    }
+                }
+            },
+            {
+                "name": "txt",
+                "id": 2,
+                "text": {
+                    "text": "Hello world",
+                    "position": {
+                        "x": 10,
+                        "y": 5,
+                        "rotation": 0
+                    },
+                    "pivot": {
+                        "x": 0,
+                        "y": 0
+                    }
+                }
+            }
+        ]
+    }
+}

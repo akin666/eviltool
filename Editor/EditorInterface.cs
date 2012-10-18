@@ -1,4 +1,4 @@
-﻿using EvilTool.Element;
+﻿using EvilTool.Controller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace EvilTool.Editor
 {
-    public interface NodeControlInterface
+    public interface EditorInterface
     {
-        void kill();
-        NodeInterface getNode();
+        ControllerInterface getNode();
     }
 }

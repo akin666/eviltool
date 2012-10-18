@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace EvilTool.Model
 {
-    public class PointModel
+    public class Text
     {
-        public List<Point> vertexes = new List<Point>();
+        public string text { get; set; }
+        public Position position { get; set; }
+        public Point pivot { get; set; }
     }
 }

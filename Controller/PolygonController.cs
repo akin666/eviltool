@@ -10,20 +10,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EvilTool.Element
+namespace EvilTool.Controller
 {
-    public class PolygonNode : NodeInterface
+    public class PolygonController : ControllerInterface
     {
-        public PolygonModel polygon { get; set; }
+        public Polygon polygon { get; set; }
 
-        public PolygonNode(PolygonModel polygon)
+        public PolygonController(Polygon polygon)
         {
             this.polygon = polygon;
         }
 
         public Control createControl()
         {
-            return new PolygonControl(this);
+            return new PolygonEditor(this);
         }
 
         public string getName()

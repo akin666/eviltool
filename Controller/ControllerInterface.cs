@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EvilTool.Element
+namespace EvilTool.Controller
 {
-    public interface NodeInterface
+    public interface ControllerInterface
     {
         Control createControl();
         string getName();

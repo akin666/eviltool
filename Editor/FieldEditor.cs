@@ -7,16 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EvilTool.Element;
+using EvilTool.Controller;
 
 namespace EvilTool.Editor
 {
-    public partial class PointControl : UserControl, NodeControlInterface
+    public partial class FieldEditor : UserControl, EditorInterface
     {
         private Point mouseOffset = new Point(0, 0);
-        private PointNode target;
+        private FieldController target;
 
-        public PointControl(PointNode node)
+        public FieldEditor(FieldController node)
         {
             InitializeComponent();
             target = node;
@@ -29,29 +29,31 @@ namespace EvilTool.Editor
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.draw);
         }
 
-        public void kill()
-        {
-        }
-
-        public NodeInterface getNode()
+        public ControllerInterface getNode()
         {
             return target;
+        }
+
+        private void addPoint(Point position)
+        {
+            if (target.field.points == null)
+            {
+                target.field.points = new List<Point>();
+            }
+            target.field.points.Add(position);
         }
 
         private void mouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             // Update the mouse path with the mouse information
-            Point mouseDownLocation = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
+            Point location = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
 
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    target.point.vertexes.Add(mouseDownLocation);
-                    //                    element.update(mouseDownLocation);
+                    addPoint(location);
                     break;
                 case MouseButtons.Right:
-                    //                   element.add();
-                    //                   element.update(mouseDownLocation);
                     break;
                 case MouseButtons.Middle:
                     break;
@@ -70,9 +72,7 @@ namespace EvilTool.Editor
 
         private void mouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            // Update the mouse path that is drawn onto the Panel.
-            Point mouseDownLocation = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
-            //           element.update(mouseDownLocation);
+            Point location = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
             this.Invalidate();
         }
 
@@ -89,13 +89,12 @@ namespace EvilTool.Editor
 
         private void mouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            Point mouseDownLocation = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
+            Point location = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
             switch (e.Button)
             {
                 case MouseButtons.Left:
                     break;
                 case MouseButtons.Right:
-                    //                   element.commit();
                     break;
                 case MouseButtons.Middle:
                     break;
@@ -112,6 +111,10 @@ namespace EvilTool.Editor
 
         public void draw(object sender, System.Windows.Forms.PaintEventArgs e)
         {
+            if (target.field.points == null)
+            {
+                return;
+            }
             Graphics graphics = e.Graphics;
             graphics.Clear(Color.AliceBlue);
 
@@ -123,7 +126,7 @@ namespace EvilTool.Editor
                 graphics.DrawEllipse(red, new Rectangle(current, new Size(10, 10)));
             }
             */
-            foreach (Point point in target.point.vertexes)
+            foreach (Point point in target.field.points)
             {
                 graphics.DrawEllipse(pen, new Rectangle(point, new Size(5, 5)));
             }

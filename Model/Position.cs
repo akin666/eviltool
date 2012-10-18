@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace EvilTool.Model
 {
-    public class TextModel
+    public class Position
     {
-        public string text { get; set; }
+        public int x { get; set; }
+        public int y { get; set; }
+        public float rotation { get; set; }
     }
 }

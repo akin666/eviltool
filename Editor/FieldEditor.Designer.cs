@@ -1,6 +1,6 @@
 ﻿namespace EvilTool.Editor
 {
-    partial class PointControl
+    partial class FieldEditor
     {
         /// <summary> 
         /// Required designer variable.

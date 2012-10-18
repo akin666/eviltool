@@ -1,5 +1,5 @@
 ﻿using EvilTool.Editor;
-using EvilTool.Element;
+using EvilTool.Controller;
 using EvilTool.Model;
 using Newtonsoft.Json;
 using System;
@@ -48,23 +48,31 @@ namespace EvilTool
                     // TODO! shoot myself for creating such structure..
                     if (tree.SelectedNode.Tag != null)
                     {
-                        if (tree.SelectedNode.Tag is ContainerNode)
+                        if (tree.SelectedNode.Tag is ContainerController)
                         {
                             menu = containerMenu;
                         }
-                        else if (tree.SelectedNode.Tag is LayerNode)
+                        else if (tree.SelectedNode.Tag is LayerController)
                         {
-                            menu = layerMenu;
+                            LayerController lc = (LayerController)tree.SelectedNode.Tag;
+                            if (!lc.alreadyInUse())
+                            {
+                                menu = layerMenu;
+                            }
+                            else
+                            {
+                                menu = basicMenu;
+                            }
                         }
-                        else if (tree.SelectedNode.Tag is PointNode)
+                        else if (tree.SelectedNode.Tag is FieldController)
                         {
                             menu = basicMenu;
                         }
-                        else if (tree.SelectedNode.Tag is PolygonNode)
+                        else if (tree.SelectedNode.Tag is PolygonController)
                         {
                             menu = basicMenu;
                         }
-                        else if (tree.SelectedNode.Tag is TextNode)
+                        else if (tree.SelectedNode.Tag is TextController)
                         {
                             menu = basicMenu;
                         }
@@ -72,10 +80,6 @@ namespace EvilTool
                 }
                 menu.Show(tree, e.Location);
             }
-        }
-
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
         }
 
         private void exitApplication(object sender, EventArgs e)
@@ -110,11 +114,6 @@ namespace EvilTool
 
             this.splitContainer1.Panel2.Controls.Clear();
 
-            if (editor is NodeControlInterface)
-            {
-                NodeControlInterface ni = (NodeControlInterface)editor;
-                ni.kill();
-            }
             editor = null;
         }
 
@@ -123,10 +122,10 @@ namespace EvilTool
             if (item != null && editor != null)
             {
                 // same node?
-                if (editor is NodeControlInterface && item is NodeControlInterface)
+                if (editor is EditorInterface && item is EditorInterface)
                 {
-                    NodeControlInterface a = (NodeControlInterface)editor;
-                    NodeControlInterface b = (NodeControlInterface)item;
+                    EditorInterface a = (EditorInterface)editor;
+                    EditorInterface b = (EditorInterface)item;
 
                     if (a.getNode() == b.getNode())
                     {
@@ -151,12 +150,15 @@ namespace EvilTool
         private void createPoint(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            if (selected.Tag is LayerNode)
+            if (selected.Tag is LayerController)
             {
                 // model
-                LayerNode parent = (LayerNode)selected.Tag;
-                PointNode node = new PointNode(new PointModel());
-                parent.add(node);
+                LayerController parent = (LayerController)selected.Tag;
+                FieldController node = new FieldController(new Field());
+                if (!parent.add(node))
+                {
+                    // failed! TODO
+                }
 
                 // ui
                 TreeNode added = selected.Nodes.Add(node.getName());
@@ -168,12 +170,15 @@ namespace EvilTool
         private void createPolygon(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            if (selected.Tag is LayerNode)
+            if (selected.Tag is LayerController)
             {
                 // model
-                LayerNode parent = (LayerNode)selected.Tag;
-                PolygonNode node = new PolygonNode(new PolygonModel());
-                parent.add(node);
+                LayerController parent = (LayerController)selected.Tag;
+                PolygonController node = new PolygonController(new Polygon());
+                if (!parent.add(node))
+                {
+                    // failed! TODO
+                }
 
                 // ui
                 TreeNode added = selected.Nodes.Add(node.getName());
@@ -185,12 +190,15 @@ namespace EvilTool
         private void createText(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            if (selected.Tag is LayerNode)
+            if (selected.Tag is LayerController)
             {
                 // model
-                LayerNode parent = (LayerNode)selected.Tag;
-                TextNode node = new TextNode(new TextModel());
-                parent.add(node);
+                LayerController parent = (LayerController)selected.Tag;
+                TextController node = new TextController(new Text());
+                if (!parent.add(node))
+                {
+                    // failed! TODO
+                }
 
                 // ui
                 TreeNode added = selected.Nodes.Add(node.getName());
@@ -202,11 +210,11 @@ namespace EvilTool
         private void createLayer(object sender, EventArgs e)
         {
             TreeNode selected = tree.SelectedNode;
-            if (selected.Tag is ContainerNode)
+            if (selected.Tag is ContainerController)
             {
                 // model
-                ContainerNode parent = (ContainerNode)selected.Tag;
-                LayerNode node = new LayerNode(new LayerModel());
+                ContainerController parent = (ContainerController)selected.Tag;
+                LayerController node = new LayerController(new Layer());
                 parent.add(node);
 
                 // ui
@@ -218,7 +226,7 @@ namespace EvilTool
 
         private void createContainer(object sender, EventArgs e)
         {
-            NodeInterface node = new ContainerNode( new ContainerModel() );
+            ControllerInterface node = new ContainerController( new EvilTool.Model.Container() );
             TreeNode added = tree.Nodes.Add(node.getName());
             added.Tag = node;
         }
@@ -231,9 +239,9 @@ namespace EvilTool
                 return;
             }
 
-            if (selected.Tag is NodeInterface)
+            if (selected.Tag is ControllerInterface)
             {
-                NodeInterface node = (NodeInterface)selected.Tag;
+                ControllerInterface node = (ControllerInterface)selected.Tag;
 
                 setCurrentEditor(node.createControl());
             }
@@ -259,19 +267,23 @@ namespace EvilTool
                 try
                 {
                     // write data here..
-                    List<ContainerNode> nodes = new List<ContainerNode>();
+                    Root root = new Root();
+                    root.container = new List<Model.Container>();
+
+                    List<ContainerController> nodes = new List<ContainerController>();
                     foreach (TreeNode rootnode in tree.Nodes)
                     {
-                        if (rootnode.Tag is ContainerNode)
+                        if (rootnode.Tag is ContainerController)
                         {
-                            nodes.Add((ContainerNode)rootnode.Tag);
+                            nodes.Add((ContainerController)rootnode.Tag);
                         }
                     }
 
                     string json = JsonConvert.SerializeObject(
                         nodes ,
-                        new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }
-                        );
+                        new JsonSerializerSettings { 
+                            NullValueHandling = NullValueHandling.Ignore
+                        } );
 
                     byte[] byteArray = Encoding.UTF8.GetBytes( json );
                     stream.Write(byteArray, 0, byteArray.Length);
@@ -300,17 +312,12 @@ namespace EvilTool
                 {
                     if ((stream = dialog.OpenFile()) != null)
                     {
-                        List<ContainerNode> nodes;
                         using (stream)
                         {
                             StreamReader reader = new StreamReader(stream);
                             string json = reader.ReadToEnd();
 
-                            nodes = JsonConvert.DeserializeObject<List<ContainerNode>>(json);
-                        }
-                        if (nodes != null)
-                        {
-                            // convert 'nodes' to tree etc structure..
+                            var nodes = JsonConvert.DeserializeObject<List<ContainerController>>(json);
                         }
                     }
                 }

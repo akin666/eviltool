@@ -10,25 +10,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EvilTool.Element
+namespace EvilTool.Controller
 {
-    public class PointNode : NodeInterface
+    public class FieldController : ControllerInterface
     {
-        public PointModel point { get; set; }
+        public Field field { get; set; }
 
-        public PointNode(PointModel point)
+        public FieldController(Field field)
         {
-            this.point = point;
+            this.field = field;
         }
 
         public Control createControl()
         {
-            return new PointControl(this);
+            return new FieldEditor(this);
         }
 
         public string getName()
         {
-            return "point";
+            return "point field";
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using EvilTool.Model;
+﻿using EvilTool.Editor;
+using EvilTool.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,20 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EvilTool.Element
+namespace EvilTool.Controller
 {
-    public class TextNode : NodeInterface
+    public class TextController : ControllerInterface
     {
-        public TextModel text { get; set; }
+        public Text text { get; set; }
 
-        public TextNode(TextModel text)
+        public TextController(Text text)
         {
             this.text = text;
         }
 
         public Control createControl()
         {
-            return null;
+            return new TextEditor(this);
         }
 
         public string getName()

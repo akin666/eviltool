@@ -7,13 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EvilTool.Element
+namespace EvilTool.Controller
 {
-    public class ContainerNode : NodeInterface
+    public class ContainerController : ControllerInterface
     {
-        public ContainerModel container { get; set; }
+        public Container container { get; set; }
 
-        public ContainerNode( ContainerModel container )
+        public ContainerController(Container container)
         {
             this.container = container;
         }
@@ -29,8 +29,12 @@ namespace EvilTool.Element
             return "container";
         }
 
-        public void add(LayerNode layer)
+        public void add(LayerController layer)
         {
+            if (container.layers == null)
+            {
+                container.layers = new List<Layer>();
+            }
             container.layers.Add(layer.layer);
         }
     }

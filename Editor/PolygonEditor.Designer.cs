@@ -1,6 +1,6 @@
 ﻿namespace EvilTool.Editor
 {
-    partial class PolygonControl
+    partial class PolygonEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.addPoint = new System.Windows.Forms.Button();
-            this.subdivide = new System.Windows.Forms.Button();
+            this.addPointButton = new System.Windows.Forms.Button();
+            this.subdivideButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -41,33 +41,33 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // addPoint
+            // addPointButton
             // 
-            this.addPoint.Location = new System.Drawing.Point(4, 4);
-            this.addPoint.Name = "addPoint";
-            this.addPoint.Size = new System.Drawing.Size(75, 23);
-            this.addPoint.TabIndex = 1;
-            this.addPoint.Text = "add point";
-            this.addPoint.UseVisualStyleBackColor = true;
-            this.addPoint.Click += new System.EventHandler(this.addPoint_Click);
+            this.addPointButton.Location = new System.Drawing.Point(4, 4);
+            this.addPointButton.Name = "addPointButton";
+            this.addPointButton.Size = new System.Drawing.Size(75, 23);
+            this.addPointButton.TabIndex = 1;
+            this.addPointButton.Text = "add point";
+            this.addPointButton.UseVisualStyleBackColor = true;
+            this.addPointButton.Click += new System.EventHandler(this.addPoint_Click);
             // 
-            // subdivide
+            // subdivideButton
             // 
-            this.subdivide.Location = new System.Drawing.Point(85, 4);
-            this.subdivide.Name = "subdivide";
-            this.subdivide.Size = new System.Drawing.Size(75, 23);
-            this.subdivide.TabIndex = 2;
-            this.subdivide.Text = "subdivide";
-            this.subdivide.UseVisualStyleBackColor = true;
-            this.subdivide.Click += new System.EventHandler(this.subdivide_Click);
+            this.subdivideButton.Location = new System.Drawing.Point(85, 4);
+            this.subdivideButton.Name = "subdivideButton";
+            this.subdivideButton.Size = new System.Drawing.Size(75, 23);
+            this.subdivideButton.TabIndex = 2;
+            this.subdivideButton.Text = "subdivide";
+            this.subdivideButton.UseVisualStyleBackColor = true;
+            this.subdivideButton.Click += new System.EventHandler(this.subdivide_Click);
             // 
             // PolygonControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.subdivide);
-            this.Controls.Add(this.addPoint);
+            this.Controls.Add(this.subdivideButton);
+            this.Controls.Add(this.addPointButton);
             this.Controls.Add(this.toolStrip1);
             this.Cursor = System.Windows.Forms.Cursors.Cross;
             this.DoubleBuffered = true;
@@ -81,8 +81,8 @@
         #endregion
 
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.Button addPoint;
-        private System.Windows.Forms.Button subdivide;
+        private System.Windows.Forms.Button addPointButton;
+        private System.Windows.Forms.Button subdivideButton;
 
     }
 }

@@ -117,21 +117,21 @@
             // loadFileMenu
             // 
             this.loadFileMenu.Name = "loadFileMenu";
-            this.loadFileMenu.Size = new System.Drawing.Size(152, 22);
+            this.loadFileMenu.Size = new System.Drawing.Size(112, 22);
             this.loadFileMenu.Text = "Load";
             this.loadFileMenu.Click += new System.EventHandler(this.loadFileMenu_Click);
             // 
             // saveAsFileMenu
             // 
             this.saveAsFileMenu.Name = "saveAsFileMenu";
-            this.saveAsFileMenu.Size = new System.Drawing.Size(152, 22);
+            this.saveAsFileMenu.Size = new System.Drawing.Size(112, 22);
             this.saveAsFileMenu.Text = "Save as";
             this.saveAsFileMenu.Click += new System.EventHandler(this.saveAsFileMenu_Click);
             // 
             // exitFileMenu
             // 
             this.exitFileMenu.Name = "exitFileMenu";
-            this.exitFileMenu.Size = new System.Drawing.Size(152, 22);
+            this.exitFileMenu.Size = new System.Drawing.Size(112, 22);
             this.exitFileMenu.Text = "Exit";
             this.exitFileMenu.Click += new System.EventHandler(this.exitApplication);
             // 
@@ -167,7 +167,6 @@
             this.new_item});
             this.treemenu.Name = "treemenu";
             this.treemenu.Size = new System.Drawing.Size(97, 26);
-            this.treemenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // new_item
             // 
@@ -180,7 +179,7 @@
             // containerToolStripMenuItem
             // 
             this.containerToolStripMenuItem.Name = "containerToolStripMenuItem";
-            this.containerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.containerToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.containerToolStripMenuItem.Text = "container";
             this.containerToolStripMenuItem.Click += new System.EventHandler(this.createContainer);
             // 
@@ -239,21 +238,21 @@
             // textToolStripMenuItem
             // 
             this.textToolStripMenuItem.Name = "textToolStripMenuItem";
-            this.textToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.textToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.textToolStripMenuItem.Text = "text";
             this.textToolStripMenuItem.Click += new System.EventHandler(this.createText);
             // 
             // pointToolStripMenuItem
             // 
             this.pointToolStripMenuItem.Name = "pointToolStripMenuItem";
-            this.pointToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.pointToolStripMenuItem.Text = "point";
+            this.pointToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pointToolStripMenuItem.Text = "point field";
             this.pointToolStripMenuItem.Click += new System.EventHandler(this.createPoint);
             // 
             // polygonToolStripMenuItem
             // 
             this.polygonToolStripMenuItem.Name = "polygonToolStripMenuItem";
-            this.polygonToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.polygonToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.polygonToolStripMenuItem.Text = "polygon";
             this.polygonToolStripMenuItem.Click += new System.EventHandler(this.createPolygon);
             // 

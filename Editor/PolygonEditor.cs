@@ -7,18 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EvilTool.Element;
+using EvilTool.Controller;
 using EvilTool.utils;
 
 namespace EvilTool.Editor
 {
-    public partial class PolygonControl : UserControl, NodeControlInterface
+    public partial class PolygonEditor : UserControl, EditorInterface
     {
         private Point mouseOffset = new Point(-10, -10);
-        private PolygonNode target;
+        private PolygonController target;
         private int selected = -1;
 
-        public PolygonControl(PolygonNode node)
+        public PolygonEditor(PolygonController node)
         {
             InitializeComponent();
 
@@ -32,13 +32,18 @@ namespace EvilTool.Editor
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.draw);
         }
 
-        public void kill()
-        {
-        }
-
-        public NodeInterface getNode()
+        public ControllerInterface getNode()
         {
             return target;
+        }
+
+        private void addPoint(Point position)
+        {
+            if (target.polygon.points == null)
+            {
+                target.polygon.points = new List<Point>();
+            }
+            target.polygon.points.Add(position);
         }
 
         private void mouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -46,16 +51,19 @@ namespace EvilTool.Editor
             // Update the mouse path with the mouse information
             Point location = new Point(e.X , e.Y);
 
+            if (target.polygon.points == null)
+            {
+                return;
+            }
+
             switch (e.Button)
             {
                 case MouseButtons.Left:
                 {
-                    //target.points.Add(mouseDownLocation);
-                    //                    element.update(mouseDownLocation);
                     List<int> candidates = new List<int>();
-                    for( int i = 0 ; i < target.polygon.vertexes.Count ; ++i )
+                    for (int i = 0; i < target.polygon.points.Count; ++i)
                     {
-                        Point point = target.polygon.vertexes[i];
+                        Point point = target.polygon.points[i];
                         double distance = MathHelper.distance(location, point);
                         if (distance < 15.0f)
                         {
@@ -65,7 +73,7 @@ namespace EvilTool.Editor
                     double min = 15.0f;
                     foreach (int index in candidates)
                     {
-                        Point point = target.polygon.vertexes[index];
+                        Point point = target.polygon.points[index];
                         double distance = MathHelper.distance(location, point);
                         if (distance < min)
                         {
@@ -76,8 +84,6 @@ namespace EvilTool.Editor
                     break;
                 }
                 case MouseButtons.Right:
-                    //                   element.add();
-                    //                   element.update(mouseDownLocation);
                     break;
                 case MouseButtons.Middle:
                     break;
@@ -98,11 +104,10 @@ namespace EvilTool.Editor
         {
             // Update the mouse path that is drawn onto the Panel.
             Point location = new Point(e.X , e.Y );
-            //           element.update(mouseDownLocation);
 
             if (selected >= 0)
             {
-                target.polygon.vertexes[selected] = location;
+                target.polygon.points[selected] = location;
             }
 
             this.Invalidate();
@@ -122,14 +127,13 @@ namespace EvilTool.Editor
 
         private void mouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            Point mouseDownLocation = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
+            Point location = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
             switch (e.Button)
             {
                 case MouseButtons.Left:
                     selected = -1;
                     break;
                 case MouseButtons.Right:
-                    //                   element.commit();
                     break;
                 case MouseButtons.Middle:
                     break;
@@ -146,10 +150,15 @@ namespace EvilTool.Editor
 
         public void draw(object sender, System.Windows.Forms.PaintEventArgs e)
         {
+            if (target.polygon.points == null)
+            {
+                return;
+            }
+
             Graphics graphics = e.Graphics;
             graphics.Clear(Color.AliceBlue);
 
-            List<Point> vertexes = target.polygon.vertexes;
+            List<Point> vertexes = target.polygon.points;
 
             Pen blue = new Pen(Color.Blue, 2.0f);
             Pen red = new Pen(Color.Red, 1.0f);
@@ -184,15 +193,15 @@ namespace EvilTool.Editor
 
         private void addPoint_Click(object sender, EventArgs e)
         {
-            target.polygon.vertexes.Add(new Point(100, 100));
+            addPoint(new Point(100, 100));
         }
 
         private void subdivide_Click(object sender, EventArgs e)
         {
             List<Point> points = new List<Point>();
-            List<Point> old = target.polygon.vertexes;
+            List<Point> old = target.polygon.points;
 
-            if (old.Count < 2)
+            if (old == null || old.Count < 2)
             {
                 return;
             }
@@ -212,32 +221,7 @@ namespace EvilTool.Editor
             points.Add(last);
             points.Add(MathHelper.midPoint(first, last));
 
-            target.polygon.vertexes = points;
+            target.polygon.points = points;
         }
-
-        /*
-        public void draw(Graphics graphics)
-        {
-            Pen pen = new Pen(Color.Blue, 2.0f);
-            try
-            {
-                if (tracking && current != null)
-                {
-                    Pen red = new Pen(Color.Red, 3.0f);
-                    graphics.DrawEllipse(red, new Rectangle(current, new Size(10, 10)));
-                }
-
-                graphics.DrawPolygon(pen, points.ToArray());
-            }
-            catch (DivideByZeroException e)
-            {
-                Console.WriteLine("Attempted divide by zero.");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("exception happened.");
-            }
-        }
-        */
     }
 }

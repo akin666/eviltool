@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace EvilTool.Model
 {
-    public class LayerModel
+    public class Root
     {
-        public string name { get; set; }
-        public int level { get; set; }
-        public Object child { get; set; }
+        public List<Container> container { get; set; }
     }
 }
