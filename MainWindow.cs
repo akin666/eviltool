@@ -270,17 +270,16 @@ namespace EvilTool
                     Root root = new Root();
                     root.container = new List<Model.Container>();
 
-                    List<ContainerController> nodes = new List<ContainerController>();
                     foreach (TreeNode rootnode in tree.Nodes)
                     {
                         if (rootnode.Tag is ContainerController)
                         {
-                            nodes.Add((ContainerController)rootnode.Tag);
+                            root.container.Add(((ContainerController)rootnode.Tag).container);
                         }
                     }
 
                     string json = JsonConvert.SerializeObject(
-                        nodes ,
+                        root,
                         new JsonSerializerSettings { 
                             NullValueHandling = NullValueHandling.Ignore
                         } );
