@@ -38,8 +38,8 @@ namespace EvilTool.utils
             Rectangle rect = new Rectangle(tl, new Size(size, size));
             graphics.DrawEllipse(pen, rect);
         }
-        
-        public static void polygon( Graphics graphics , List<Vec3> vertexes , Pen pen )
+
+        public static void polygon(Graphics graphics, List<Vec3> vertexes, Brush pen)
         {
             if( vertexes == null || vertexes.Count < 1 )
             {
@@ -50,6 +50,22 @@ namespace EvilTool.utils
             for( int i = 0 ; i < vertexes.Count ; ++i )
             {
                 points.Add( new Point( (int)vertexes[i].x , (int)vertexes[i].y ) );
+            }
+
+            graphics.FillPolygon(pen, points.ToArray());
+        }
+
+        public static void polygon(Graphics graphics, List<Vec3> vertexes, Pen pen)
+        {
+            if (vertexes == null || vertexes.Count < 1)
+            {
+                return;
+            }
+
+            List<Point> points = new List<Point>();
+            for (int i = 0; i < vertexes.Count; ++i)
+            {
+                points.Add(new Point((int)vertexes[i].x, (int)vertexes[i].y));
             }
 
             graphics.DrawPolygon(pen, points.ToArray());

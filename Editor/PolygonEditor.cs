@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using EvilTool.Controller;
 using EvilTool.utils;
 using EvilTool.Model;
+using System.Drawing.Drawing2D;
 
 namespace EvilTool.Editor
 {
@@ -21,6 +22,8 @@ namespace EvilTool.Editor
         private PolygonController target;
         private List<int> selected = new List<int>();
         private Selector selector = new Selector();
+        private TextureBrush brush;
+
 
         public PolygonEditor(PolygonController node)
         {
@@ -165,7 +168,18 @@ namespace EvilTool.Editor
             {
                 if (vertexes.Count() > 1)
                 {
-                    GraphicsHelper.polygon(graphics, vertexes, blue);
+                    if (this.radiolines.Checked)
+                    {
+                        GraphicsHelper.polygon(graphics, vertexes, blue);
+                    }
+                    else if (this.radiotexture.Checked && this.brush != null)
+                    {
+                        GraphicsHelper.polygon(graphics, vertexes, brush);
+                    }
+                    else
+                    {
+                        GraphicsHelper.polygon(graphics, vertexes, red);
+                    }
                 }
                 foreach (Vec3 point in vertexes)
                 {
@@ -180,7 +194,6 @@ namespace EvilTool.Editor
 
             GraphicsHelper.draw(graphics, selector, red);
             GraphicsHelper.dimensions(graphics, dimensionhud, 50.0f);
-            
         }
 
         private void addPoint_Click(object sender, EventArgs e)
@@ -214,6 +227,35 @@ namespace EvilTool.Editor
             points.Add(MathHelper.midPoint(first, last));
 
             target.polygon.points = points;
+            this.view.Invalidate();
+        }
+
+        private void buttontexture_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            dlg.Title = "Open Image";
+            dlg.Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*";
+
+            if (dlg.ShowDialog() != DialogResult.OK)
+            {                     
+                return;
+            }
+            Bitmap fillImage = new Bitmap(dlg.FileName);
+
+            brush = new TextureBrush(new Bitmap(fillImage));
+
+            Matrix mtx = brush.Transform;
+            mtx.Translate(0, 0);
+            brush.Transform = mtx;
+
+            dlg.Dispose();
+
+            this.view.Invalidate();
+        }
+
+        private void fillChanged(object sender, EventArgs e)
+        {
             this.view.Invalidate();
         }
     }

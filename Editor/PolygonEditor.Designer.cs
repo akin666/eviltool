@@ -30,6 +30,10 @@
         {
             this.subdivideButton = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.buttontexture = new System.Windows.Forms.Button();
+            this.radiotexture = new System.Windows.Forms.RadioButton();
+            this.radiolines = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.radiopolygon = new System.Windows.Forms.RadioButton();
             this.radiopoint = new System.Windows.Forms.RadioButton();
@@ -42,6 +46,7 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.view)).BeginInit();
@@ -66,6 +71,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.groupBox3);
             this.splitContainer1.Panel1.Controls.Add(this.groupBox2);
             this.splitContainer1.Panel1.Controls.Add(this.groupBox1);
             this.splitContainer1.Panel1.Controls.Add(this.subdivideButton);
@@ -73,15 +79,62 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.view);
-            this.splitContainer1.Size = new System.Drawing.Size(362, 306);
+            this.splitContainer1.Size = new System.Drawing.Size(534, 365);
             this.splitContainer1.SplitterDistance = 100;
             this.splitContainer1.TabIndex = 3;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.buttontexture);
+            this.groupBox3.Controls.Add(this.radiotexture);
+            this.groupBox3.Controls.Add(this.radiolines);
+            this.groupBox3.Location = new System.Drawing.Point(8, 215);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(89, 117);
+            this.groupBox3.TabIndex = 8;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Fill";
+            // 
+            // buttontexture
+            // 
+            this.buttontexture.Location = new System.Drawing.Point(7, 59);
+            this.buttontexture.Name = "buttontexture";
+            this.buttontexture.Size = new System.Drawing.Size(75, 23);
+            this.buttontexture.TabIndex = 2;
+            this.buttontexture.Text = "Select texture";
+            this.buttontexture.UseVisualStyleBackColor = true;
+            this.buttontexture.Click += new System.EventHandler(this.buttontexture_Click);
+            // 
+            // radiotexture
+            // 
+            this.radiotexture.AutoSize = true;
+            this.radiotexture.Location = new System.Drawing.Point(7, 35);
+            this.radiotexture.Name = "radiotexture";
+            this.radiotexture.Size = new System.Drawing.Size(61, 17);
+            this.radiotexture.TabIndex = 1;
+            this.radiotexture.TabStop = true;
+            this.radiotexture.Text = "Texture";
+            this.radiotexture.UseVisualStyleBackColor = true;
+            this.radiotexture.CheckedChanged += new System.EventHandler(this.fillChanged);
+            // 
+            // radiolines
+            // 
+            this.radiolines.AutoSize = true;
+            this.radiolines.Checked = true;
+            this.radiolines.Location = new System.Drawing.Point(7, 11);
+            this.radiolines.Name = "radiolines";
+            this.radiolines.Size = new System.Drawing.Size(50, 17);
+            this.radiolines.TabIndex = 0;
+            this.radiolines.TabStop = true;
+            this.radiolines.Text = "Lines";
+            this.radiolines.UseVisualStyleBackColor = true;
+            this.radiolines.CheckedChanged += new System.EventHandler(this.fillChanged);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.radiopolygon);
             this.groupBox2.Controls.Add(this.radiopoint);
-            this.groupBox2.Location = new System.Drawing.Point(3, 193);
+            this.groupBox2.Location = new System.Drawing.Point(2, 135);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(95, 73);
             this.groupBox2.TabIndex = 7;
@@ -95,13 +148,13 @@
             this.radiopolygon.Name = "radiopolygon";
             this.radiopolygon.Size = new System.Drawing.Size(62, 17);
             this.radiopolygon.TabIndex = 1;
-            this.radiopolygon.TabStop = true;
             this.radiopolygon.Text = "polygon";
             this.radiopolygon.UseVisualStyleBackColor = true;
             // 
             // radiopoint
             // 
             this.radiopoint.AutoSize = true;
+            this.radiopoint.Checked = true;
             this.radiopoint.Location = new System.Drawing.Point(6, 20);
             this.radiopoint.Name = "radiopoint";
             this.radiopoint.Size = new System.Drawing.Size(48, 17);
@@ -115,9 +168,9 @@
             this.groupBox1.Controls.Add(this.radioselect);
             this.groupBox1.Controls.Add(this.radioremove);
             this.groupBox1.Controls.Add(this.radioadd);
-            this.groupBox1.Location = new System.Drawing.Point(2, 61);
+            this.groupBox1.Location = new System.Drawing.Point(2, 32);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(95, 126);
+            this.groupBox1.Size = new System.Drawing.Size(95, 97);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Action";
@@ -129,7 +182,6 @@
             this.radioselect.Name = "radioselect";
             this.radioselect.Size = new System.Drawing.Size(53, 17);
             this.radioselect.TabIndex = 6;
-            this.radioselect.TabStop = true;
             this.radioselect.Text = "select";
             this.radioselect.UseVisualStyleBackColor = true;
             // 
@@ -140,13 +192,13 @@
             this.radioremove.Name = "radioremove";
             this.radioremove.Size = new System.Drawing.Size(60, 17);
             this.radioremove.TabIndex = 5;
-            this.radioremove.TabStop = true;
             this.radioremove.Text = "remove";
             this.radioremove.UseVisualStyleBackColor = true;
             // 
             // radioadd
             // 
             this.radioadd.AutoSize = true;
+            this.radioadd.Checked = true;
             this.radioadd.Location = new System.Drawing.Point(6, 19);
             this.radioadd.Name = "radioadd";
             this.radioadd.Size = new System.Drawing.Size(43, 17);
@@ -160,7 +212,7 @@
             this.view.Dock = System.Windows.Forms.DockStyle.Fill;
             this.view.Location = new System.Drawing.Point(0, 0);
             this.view.Name = "view";
-            this.view.Size = new System.Drawing.Size(258, 306);
+            this.view.Size = new System.Drawing.Size(430, 365);
             this.view.TabIndex = 0;
             this.view.TabStop = false;
             // 
@@ -173,11 +225,13 @@
             this.Cursor = System.Windows.Forms.Cursors.Cross;
             this.DoubleBuffered = true;
             this.Name = "PolygonEditor";
-            this.Size = new System.Drawing.Size(362, 306);
+            this.Size = new System.Drawing.Size(534, 365);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -199,6 +253,10 @@
         private System.Windows.Forms.RadioButton radiopoint;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton radioselect;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button buttontexture;
+        private System.Windows.Forms.RadioButton radiotexture;
+        private System.Windows.Forms.RadioButton radiolines;
 
     }
 }
