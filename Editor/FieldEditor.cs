@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EvilTool.Controller;
+using EvilTool.Model;
+using EvilTool.utils;
 
 namespace EvilTool.Editor
 {
     public partial class FieldEditor : UserControl, EditorInterface
     {
-        private Point mouseOffset = new Point(0, 0);
+        private Vec3 mouseOffset = new Vec3( 0.0f, 0.0f, 0.0f);
         private FieldController target;
 
         public FieldEditor(FieldController node)
@@ -34,11 +36,11 @@ namespace EvilTool.Editor
             return target;
         }
 
-        private void addPoint(Point position)
+        private void addPoint(Vec3 position)
         {
             if (target.field.points == null)
             {
-                target.field.points = new List<Point>();
+                target.field.points = new List<Vec3>();
             }
             target.field.points.Add(position);
         }
@@ -46,7 +48,7 @@ namespace EvilTool.Editor
         private void mouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             // Update the mouse path with the mouse information
-            Point location = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
+            Vec3 location = new Vec3(e.X + mouseOffset.x, e.Y + mouseOffset.y , 0.0f );
 
             switch (e.Button)
             {
@@ -72,7 +74,7 @@ namespace EvilTool.Editor
 
         private void mouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            Point location = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
+            Vec3 location = new Vec3(e.X + mouseOffset.x, e.Y + mouseOffset.y , 0.0f );
             this.Invalidate();
         }
 
@@ -89,7 +91,7 @@ namespace EvilTool.Editor
 
         private void mouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            Point location = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
+            Vec3 location = new Vec3(e.X + mouseOffset.x, e.Y + mouseOffset.y, 0.0f);
             switch (e.Button)
             {
                 case MouseButtons.Left:
@@ -119,18 +121,11 @@ namespace EvilTool.Editor
             graphics.Clear(Color.AliceBlue);
 
             Pen pen = new Pen(Color.Black, 2.0f);
-            /*
-            if (tracking && current != null)
+
+            foreach (Vec3 point in target.field.points)
             {
-                Pen red = new Pen(Color.Red, 3.0f);
-                graphics.DrawEllipse(red, new Rectangle(current, new Size(10, 10)));
+                GraphicsHelper.circle(graphics, point, 5, pen);
             }
-            */
-            foreach (Point point in target.field.points)
-            {
-                graphics.DrawEllipse(pen, new Rectangle(point, new Size(5, 5)));
-            }
-            //graphics.Dispose();
         }
     }
 }

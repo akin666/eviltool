@@ -9,8 +9,7 @@ namespace EvilTool.Model
 {
     public class Field
     {
-        public List<Point> points { get; set; }
-        public Position position { get; set; }
-        public Point pivot { get; set; }
+        public List<Vec3> points { get; set; }
+        public Vec3 pivot { get; set; }
     }
 }

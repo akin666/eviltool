@@ -10,6 +10,7 @@ namespace EvilTool.Model
     {
         public string name { get; set; }
         public int id { get; set; }
+        public Position position { get; set; }
 
         // potential things inside.. who needs inheritance anyways, its for.. 
         public Polygon polygon { get; set; }

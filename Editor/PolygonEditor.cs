@@ -9,27 +9,33 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EvilTool.Controller;
 using EvilTool.utils;
+using EvilTool.Model;
 
 namespace EvilTool.Editor
 {
     public partial class PolygonEditor : UserControl, EditorInterface
     {
-        private Point mouseOffset = new Point(-10, -10);
+        private Vec3 mouseOffset = new Vec3( 0.0f, 0.0f, 0.0f );
+        private Vec3 dimensionhud = new Vec3(10.0f, 10.0f, 10.0f);
+        private Vec3 lastmoveposition = new Vec3(0.0f, 0.0f, 0.0f);
         private PolygonController target;
-        private int selected = -1;
+        private List<int> selected = new List<int>();
+        private Selector selector = new Selector();
 
         public PolygonEditor(PolygonController node)
         {
             InitializeComponent();
 
             target = node;
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mouseMove);
-            this.MouseLeave += new System.EventHandler(this.mouseLeave);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
-            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.mouseWheel);
+            this.view.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mouseMove);
+            this.view.MouseLeave += new System.EventHandler(this.mouseLeave);
+            this.view.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouseDown);
+            this.view.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mouseUp);
+            this.view.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.mouseWheel);
 
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.draw);
+            this.view.Paint += new System.Windows.Forms.PaintEventHandler(this.draw);
+
+        //    this.view.Invalidate();
         }
 
         public ControllerInterface getNode()
@@ -37,85 +43,78 @@ namespace EvilTool.Editor
             return target;
         }
 
-        private void addPoint(Point position)
+        private void addPoint(Vec3 position)
         {
             if (target.polygon.points == null)
             {
-                target.polygon.points = new List<Point>();
+                target.polygon.points = new List<Vec3>();
             }
             target.polygon.points.Add(position);
+            this.view.Invalidate();
         }
 
         private void mouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             // Update the mouse path with the mouse information
-            Point location = new Point(e.X , e.Y);
+            Vec3 location = new Vec3(e.X, e.Y, 0.0f);
 
-            if (target.polygon.points == null)
+            if (this.radioadd.Checked)
             {
-                return;
-            }
-
-            switch (e.Button)
-            {
-                case MouseButtons.Left:
+                if (e.Button == MouseButtons.Left)
                 {
-                    List<int> candidates = new List<int>();
-                    for (int i = 0; i < target.polygon.points.Count; ++i)
-                    {
-                        Point point = target.polygon.points[i];
-                        double distance = MathHelper.distance(location, point);
-                        if (distance < 15.0f)
-                        {
-                            candidates.Add( i );
-                        }
-                    }
-                    double min = 15.0f;
-                    foreach (int index in candidates)
-                    {
-                        Point point = target.polygon.points[index];
-                        double distance = MathHelper.distance(location, point);
-                        if (distance < min)
-                        {
-                            selected = index;
-                            min = distance;
-                        }
-                    }
-                    break;
+                    addPoint(location);
                 }
-                case MouseButtons.Right:
-                    break;
-                case MouseButtons.Middle:
-                    break;
-                case MouseButtons.XButton1:
-                    break;
-                case MouseButtons.XButton2:
-                    break;
-                case MouseButtons.None:
-                default:
-                    break;
+            }
+            else if (this.radioselect.Checked && target.polygon.points != null)
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    selector.addToPoly(location);
+                }
+            }
+            
+            if (e.Button == MouseButtons.Right)
+            {
+                lastmoveposition.x = e.X;
+                lastmoveposition.y = e.Y;
             }
 
-            this.Focus();
-            this.Invalidate();
+            this.view.Focus();
+            this.view.Invalidate();
         }
 
         private void mouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            // Update the mouse path that is drawn onto the Panel.
-            Point location = new Point(e.X , e.Y );
-
-            if (selected >= 0)
+            if (this.radioadd.Checked)
             {
-                target.polygon.points[selected] = location;
+                return;
             }
 
-            this.Invalidate();
+            Vec3 location = new Vec3(e.X, e.Y, 0.0f);
+            if (e.Button == MouseButtons.Left)
+            {
+                selector.addToPoly(location);
+                this.view.Invalidate();
+            }
+            else if ( e.Button == MouseButtons.Right)
+            {
+                Vec3 diff = new Vec3(e.X - lastmoveposition.x, e.Y - lastmoveposition.y, 0.0f);
+
+                lastmoveposition.x = e.X;
+                lastmoveposition.y = e.Y;
+
+                foreach (int idx in selected)
+                {
+                    target.polygon.points[idx].x += diff.x;
+                    target.polygon.points[idx].y += diff.y;
+                }
+                this.view.Invalidate();
+            }
         }
 
         private void mouseLeave(object sender, System.EventArgs e)
         {
-            selected = -1;
+            //selected.Clear();
         }
 
         private void mouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -127,79 +126,72 @@ namespace EvilTool.Editor
 
         private void mouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            Point location = new Point(e.X + mouseOffset.X, e.Y + mouseOffset.Y);
-            switch (e.Button)
+            Vec3 location = new Vec3(e.X + mouseOffset.x, e.Y + mouseOffset.y , 0.0f);
+            if (e.Button == MouseButtons.Left)
             {
-                case MouseButtons.Left:
-                    selected = -1;
-                    break;
-                case MouseButtons.Right:
-                    break;
-                case MouseButtons.Middle:
-                    break;
-                case MouseButtons.XButton1:
-                    break;
-                case MouseButtons.XButton2:
-                    break;
-                case MouseButtons.None:
-                default:
-                    break;
+                List<int> remaining = selector.collide(target.polygon.points);
+
+                for (int i = 0; i < remaining.Count; ++i)
+                {
+                    int index = remaining[i];
+
+                    if (selected.Exists(item => item == index))
+                    {
+                        selected.Remove(index);
+                    }
+                    else
+                    {
+                        selected.Add(index);
+                    }
+                }
+
+                selector.reset();
             }
-            this.Invalidate();
+            this.view.Invalidate();
         }
 
         public void draw(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-            if (target.polygon.points == null)
-            {
-                return;
-            }
-
             Graphics graphics = e.Graphics;
             graphics.Clear(Color.AliceBlue);
 
-            List<Point> vertexes = target.polygon.points;
+            List<Vec3> vertexes = target.polygon.points;
 
             Pen blue = new Pen(Color.Blue, 2.0f);
             Pen red = new Pen(Color.Red, 1.0f);
             Pen black = new Pen(Color.Black, 2.0f);
 
-            if (vertexes.Count() > 1)
+            if (target.polygon.points != null)
             {
-                try
+                if (vertexes.Count() > 1)
                 {
-                    graphics.DrawPolygon(blue, vertexes.ToArray());
+                    GraphicsHelper.polygon(graphics, vertexes, blue);
                 }
-                catch (DivideByZeroException ex)
+                foreach (Vec3 point in vertexes)
                 {
-                    Console.WriteLine("Attempted divide by zero." + ex.ToString());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("exception happened." + ex.ToString());
+                    GraphicsHelper.circle(graphics, point, 5, black);
                 }
 
+                foreach (int idx in selected)
+                {
+                    GraphicsHelper.circle(graphics, target.polygon.points[idx], 10, red);
+                }
             }
-            foreach (Point point in vertexes)
-            {
-                GraphicsHelper.circle(graphics, point, 15, red);
-            }
-            if (selected >= 0)
-            {
-                GraphicsHelper.circle(graphics, vertexes[selected], 10, black);
-            }
-            //graphics.Dispose();
+
+            GraphicsHelper.draw(graphics, selector, red);
+            GraphicsHelper.dimensions(graphics, dimensionhud, 50.0f);
+            
         }
 
         private void addPoint_Click(object sender, EventArgs e)
         {
-            addPoint(new Point(100, 100));
+            addPoint(new Vec3(100, 100, 0.0f));
         }
 
         private void subdivide_Click(object sender, EventArgs e)
         {
-            List<Point> points = new List<Point>();
-            List<Point> old = target.polygon.points;
+            List<Vec3> points = new List<Vec3>();
+            List<Vec3> old = target.polygon.points;
 
             if (old == null || old.Count < 2)
             {
@@ -208,20 +200,21 @@ namespace EvilTool.Editor
 
             for (int i = 1; i < old.Count; ++i)
             {
-                Point prev = old[i - 1];
-                Point current = old[i];
+                Vec3 prev = old[i - 1];
+                Vec3 current = old[i];
 
                 // prev & (prev,current) midpoint..
                 points.Add(prev);
                 points.Add( MathHelper.midPoint( prev , current ) );
             }
 
-            Point first = old[0];
-            Point last = old[old.Count-1];
+            Vec3 first = old[0];
+            Vec3 last = old[old.Count - 1];
             points.Add(last);
             points.Add(MathHelper.midPoint(first, last));
 
             target.polygon.points = points;
+            this.view.Invalidate();
         }
     }
 }

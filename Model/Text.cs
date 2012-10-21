@@ -10,7 +10,6 @@ namespace EvilTool.Model
     public class Text
     {
         public string text { get; set; }
-        public Position position { get; set; }
-        public Point pivot { get; set; }
+        public Vec3 pivot { get; set; }
     }
 }
