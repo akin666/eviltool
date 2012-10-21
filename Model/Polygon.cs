@@ -11,5 +11,6 @@ namespace EvilTool.Model
     {
         public List<Vec3> points { get; set; }
         public Vec3 pivot { get; set; }
+        public string texture { get; set; }
     }
 }

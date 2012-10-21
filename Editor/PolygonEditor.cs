@@ -230,6 +230,23 @@ namespace EvilTool.Editor
             this.view.Invalidate();
         }
 
+        void loadTexture()
+        {
+            if (target.polygon.texture == null)
+            {
+                return;
+            }
+            Bitmap fillImage = new Bitmap(target.polygon.texture);
+
+            brush = new TextureBrush(new Bitmap(fillImage));
+
+            Matrix mtx = brush.Transform;
+            mtx.Translate(0, 0);
+            brush.Transform = mtx;
+
+            this.view.Invalidate();
+        }
+
         private void buttontexture_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -238,24 +255,19 @@ namespace EvilTool.Editor
             dlg.Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*";
 
             if (dlg.ShowDialog() != DialogResult.OK)
-            {                     
+            {
                 return;
             }
-            Bitmap fillImage = new Bitmap(dlg.FileName);
-
-            brush = new TextureBrush(new Bitmap(fillImage));
-
-            Matrix mtx = brush.Transform;
-            mtx.Translate(0, 0);
-            brush.Transform = mtx;
-
-            dlg.Dispose();
-
-            this.view.Invalidate();
+            target.polygon.texture = dlg.FileName;
+            loadTexture();
         }
 
         private void fillChanged(object sender, EventArgs e)
         {
+            if (brush == null)
+            {
+                loadTexture();
+            }
             this.view.Invalidate();
         }
     }
