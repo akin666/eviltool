@@ -316,7 +316,7 @@ namespace EvilTool
                             StreamReader reader = new StreamReader(stream);
                             string json = reader.ReadToEnd();
 
-                            var nodes = JsonConvert.DeserializeObject<List<ContainerController>>(json);
+                            var nodes = JsonConvert.DeserializeObject<Root>(json);
                         }
                     }
                 }

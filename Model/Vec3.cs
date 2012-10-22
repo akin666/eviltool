@@ -8,6 +8,14 @@ namespace EvilTool.Model
 {
     public class Vec3
     {
+        public float x { get; set; }
+        public float y { get; set; }
+        public float z { get; set; }
+
+        public Vec3()
+        {
+        }
+
         public Vec3(Vec3 other)
         {
             this.x = other.x;
@@ -21,9 +29,5 @@ namespace EvilTool.Model
             this.y = y;
             this.z = z;
         }
-
-        public float x { get; set; }
-        public float y { get; set; }
-        public float z { get; set; }
     }
 }
